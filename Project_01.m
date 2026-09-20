@@ -174,9 +174,29 @@ while true
                         + fft_offset;
 
 
-                    %Displaying Mean STD and Amplitude to compare
+                    %% Display Mean, STD, and Amplitude for comparison
 
+                    QAM_Amp = A_estimation;
+                    FFT_Amp = fft_amplitude;
                     
+                    QAM_Mean = mean(signal_estimation);
+                    FFT_Mean = mean(fft_signal_estimation);
+                    
+                    QAM_STD = std(signal_estimation);
+                    FFT_STD = std(fft_signal_estimation);
+                    
+                    fprintf('Modulation Amplitude: %.4f V\n', QAM_Amp);
+                    fprintf('FFT Amplitude:        %.4f V\n\n', FFT_Amp);
+                    
+                    fprintf('Modulation Mean:      %.4f V\n', QAM_Mean);
+                    fprintf('FFT Mean:             %.4f V\n\n', FFT_Mean);
+                    
+                    fprintf('Modulation STD:       %.4f V\n', QAM_STD);
+                    fprintf('FFT STD:              %.4f V\n', FFT_STD);
+                    fprintf('\n');
+                                      
+
+
                     %Plotting
                 
 
