@@ -3,7 +3,7 @@ close all; clear all; clc;
 
 % Settings
 % place where WaveForms saves data
-%directory_samples = '/Users/alex/Desktop/samples/';
+directory_samples = '/Users/alex/Desktop/samples/';
 %directory_samples = 'C:/home/Gault/samples/';
 name_file = 'acq';
 extention_file_name = 'csv';
@@ -137,34 +137,56 @@ while true
 
                     x = voltage1(:);
                     Nfft = length(x);
-
-                    % remove DC component
+                    
+                    % Remove DC component
                     x_ac = x - mean(x);
-
-                    % compute fft
+                    
+                    % Compute FFT
                     X = fft(x_ac);
-
-                    % two sided magnitude spectrum
+                    
+                    % Two-sided magnitude spectrum
                     P2 = abs(X/Nfft);
-
-                    % single sided magnitude spectrum
+                    
+                    % Single-sided magnitude spectrum
                     P1 = P2(1:floor(Nfft/2)+1);
-
-                    % account for negative frequency
+                    
+                    % Account for negative frequency
                     P1(2:end-1) = 2*P1(2:end-1);
-
-                    % frequency axis
+                    
+                    % Frequency axis
                     f = sampleRate*(0:floor(Nfft/2))/Nfft;
-
-                   % Estimate dominant frequency and amplitude
+                    
+                    
+                    % Estimate signal parameters using FFT
+                    
+                    % Find dominant frequency
                     [fft_amplitude, index] = max(P1);
+                    
+                    % Estimated frequency
                     fft_frequency = f(index);
+                    
+                    % DC offset
+                    fft_offset = mean(x);
+                    
+                    % Get complex FFT value at dominant frequency
+                    X_peak = X(index);
+                    
+                    % Estimate phase
+                    fft_phase = angle(X_peak);
+                    
+                    
+                    %% Reconstruct estimated signal
+                    
+                    t = time(:);
+                    
+                    fft_signal_estimation = fft_amplitude * cos(2*pi*fft_frequency*t + fft_phase) ...
+                        + fft_offset;
 
                     %Plotting
 
                     subplot(3,1,1)
 
-                    plot(time, voltage1)
+                    plot(time, voltage1, 'b.-')
 
                     ylabel("Volts [V]");
                     xlabel("Time [s]");
@@ -184,14 +206,12 @@ while true
 
                     subplot(3,1,3)
 
-                    plot(fft_frequency, fft_amplitude)
+                    plot(t, fft_signal_estimation)
 
                     ylabel('Amplitude [V]')
                     xlabel('Frequency [Hz]')
 
                     title('FFT')
-
-                    xlim([0 500e3])
 
 
                     %Update plot
@@ -243,4 +263,5 @@ while true
 
     end
     pause(0.05);
+
 end
