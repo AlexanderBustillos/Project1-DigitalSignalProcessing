@@ -105,7 +105,7 @@ while true
                     tn = (0:n_samples-1).' / sampleRate;
 
                     % Compute matrix E
-                    E = [ (sin(w0*tn)).'  (cos(w0*tn)).' ...
+                    E = [ (sin(w0*tn))  (cos(w0*tn)) ...
                         ones(n_samples,1) ];
 
                     pseudo_E = pinv(E);
@@ -200,8 +200,8 @@ while true
 
                     plot(t, fft_signal_estimation)
 
-                    ylabel('Amplitude [V]')
-                    xlabel('Frequency [Hz]')
+                    ylabel('Volts [V]')
+                    xlabel('Time [s]')
 
                     title('FFT')
 
@@ -242,7 +242,8 @@ while true
                     end
 
                 catch ME
-
+                    disp('ERROR: ');
+                    disp(ME.message);
                 end
 
             else 
