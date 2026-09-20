@@ -1,0 +1,8 @@
+clear() // clear the output window
+
+Scope.run()
+for(var i = 0; i<10000 && Scope1.wait();i++){ // while not stopped
+str_aux = "/Users/alex/Desktop/samples/acq"+i+".csv"
+print(str_aux)
+Scope.Export(str_aux)
+}
