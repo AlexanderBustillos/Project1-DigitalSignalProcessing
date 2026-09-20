@@ -3,8 +3,8 @@ close all; clear all; clc;
 
 % Settings
 % place where WaveForms saves data
-directory_samples = '/Users/alex/Desktop/samples/';
-%directory_samples = 'C:/home/Gault/samples/';
+%directory_samples = '/Users/alex/Desktop/samples/';
+directory_samples = 'C:/home/Gault/samples/';
 name_file = 'acq';
 extention_file_name = 'csv';
 
@@ -88,18 +88,21 @@ while true
                     % Mark this file as processed
                     lastFileProcessed = newestFile;
 
+                    %% Isolate Data
+
+                    datalength = length(M(:,2));
+
+                    time = M(1:datalength-1, 1);
+                    voltage1 = M(1:datalength-1, 2);
+
                     %% Parameter Estimation
+                    voltage1 = voltage1(:);
+                    n_samples = length(voltage1);
+
                     frequency = frequency * 1000;
                     w0 = 2*pi*frequency;
 
-                    N = [0:(numSamples-1)];
-                    tn = N / sampleRate;
-
-                    signal = amplitude*sin(w0*tn + phase) + offset;
-                    signal = signal.';
-
-                    % add noise
-                    %signal = signal + 0.5*(rand(numSamples,1)-0.5);
+                    tn = (0:n_samples-1).' / sampleRate;
 
                     % Compute matrix E
                     E = [ (sin(w0*tn)).'  (cos(w0*tn)).' ...
@@ -110,7 +113,7 @@ while true
                     % p estimation
 
                     %p = ( inv(E'*E)*E' ) * signal
-                    p = pseudo_E * signal;
+                    p = pseudo_E * voltage1;
 
                     A_estimation = sqrt( p(1)^2 + p(2)^2 );
 
@@ -121,17 +124,6 @@ while true
                     %Create estimated signal
                     signal_estimation = A_estimation* ...
                         sin(w0*tn + phi_estimation) + c_estimation;
-
-                    signal_estimation = signal_estimation';
-
-
-                    %Isolate Data
-
-                    datalength = length(M(:,2));
-
-                    time = M(1:datalength-1, 1);
-                    voltage1 = M(1:datalength-1, 2);
-
 
                     %% FFT
 
