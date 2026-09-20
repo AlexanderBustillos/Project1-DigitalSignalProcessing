@@ -3,8 +3,8 @@ close all; clear all; clc;
 
 % Settings
 % place where WaveForms saves data
-%directory_samples = '/Users/alex/Desktop/samples/';
-directory_samples = 'C:/home/Gault/samples/';
+directory_samples = '/Users/alex/Desktop/samples/';
+%directory_samples = 'C:/home/Gault/samples/';
 name_file = 'acq';
 extention_file_name = 'csv';
 
@@ -59,7 +59,6 @@ while true
 
                 try
 
-                    disp(['Reading: ' newestFile]);
                     % Read header information
                     header = readlines(newestPath);
                     sampleRate = sscanf(header(5),"#Sample rate: %fHz");
@@ -99,7 +98,7 @@ while true
                     voltage1 = voltage1(:);
                     n_samples = length(voltage1);
 
-                    frequency = frequency * 1000;
+                    frequency = frequency * 100000;
                     w0 = 2*pi*frequency;
 
                     tn = (0:n_samples-1).' / sampleRate;
@@ -174,7 +173,12 @@ while true
                     fft_signal_estimation = fft_amplitude * cos(2*pi*fft_frequency*t + fft_phase) ...
                         + fft_offset;
 
+
+                    %Displaying Mean STD and Amplitude to compare
+
+                    
                     %Plotting
+                
 
                     subplot(3,1,1)
 
@@ -194,11 +198,11 @@ while true
                     xlabel("Time [s]");
 
                     title('Parameter Estimation');
-
+                    
 
                     subplot(3,1,3)
 
-                    plot(t, fft_signal_estimation)
+                    plot(t, fft_signal_estimation, 'b.-')
 
                     ylabel('Volts [V]')
                     xlabel('Time [s]')
