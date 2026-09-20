@@ -106,7 +106,7 @@ while true
 
                     % Compute matrix E
                     E = [ (sin(w0*tn)).'  (cos(w0*tn)).' ...
-                        ones(numSamples,1) ];
+                        ones(n_samples,1) ];
 
                     pseudo_E = pinv(E);
 
