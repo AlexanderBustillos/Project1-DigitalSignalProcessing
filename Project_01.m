@@ -8,6 +8,15 @@ directory_samples = '/Users/alex/Desktop/samples/';
 name_file = 'acq';
 extention_file_name = 'csv';
 
+N_samples_STD = 50;
+Amplitude_Vector = zeros(N_samples_STD,2);
+Mean_Vector = zeros(N_samples_STD,2);
+STD_Vector = zeros(N_samples_STD,2);
+
+Counter = 1;
+
+
+
 % Find an existing file to get import settings
 files = dir(fullfile(directory_samples, [name_file '*.' extention_file_name]));
 
@@ -27,8 +36,6 @@ end
 
 % Variables for data collection
 lastFileProcessed = "";
-
-figure;
 
 while true
     % Find only acquisition CSV files
@@ -63,25 +70,11 @@ while true
                     header = readlines(newestPath);
                     sampleRate = sscanf(header(5),"#Sample rate: %fHz");
 
-                    numSamples = sscanf(header(6),"#Samples: %d");
-
-                    frequency = sscanf(header(12), "#Frequency: %f kHz");
-
-                    period = sscanf(header(13),"#Period: %f us");
-
-                    amplitude = sscanf(header(14), "#Amplitude: %f V");
-
-                    offset = sscanf(header(15), "#Offset: %f V");
-
-                    phase = sscanf(header(17),"#Phase: %f");
-
                     % Read waveform data
-
                     % Create import options if needed
                     if isempty(opts)
                         opts = detectImportOptions(newestPath);
                     end
-
                     M = readmatrix(newestPath, opts);
 
                     % Mark this file as processed
@@ -91,7 +84,7 @@ while true
 
                     datalength = length(M(:,2));
 
-                    time = M(1:datalength-1, 1);
+                    time = M(1:datalength-1, 1) - M(1);
                     voltage1 = M(1:datalength-1, 2);
 
                     %% Parameter Estimation
@@ -124,6 +117,7 @@ while true
                     signal_estimation = A_estimation* ...
                         sin(w0*tn + phi_estimation) + c_estimation;
 
+
                     %% FFT
                     
                     x = voltage1(:);
@@ -132,64 +126,70 @@ while true
                     % Remove DC component
                     fft_offset = mean(x);
                     x_ac = x - fft_offset;
-                    
+                    % Window
+
+                    %window = hamming(length(x_ac));
+                    %x_filt = x_ac.*window;
+                    Nbins = 40;
+             
                     % Compute FFT
-                    X = fft(x_ac);
+                    X = fft(x_ac, Nbins);
+
 
                     % Frequency axis
-                    f_axis = (0:Nfft-1)/Nfft * sampleRate;
+                    f_axis = (0:Nbins-1)/Nbins * sampleRate;
                     
-                    % Only look at positive frequencies
-                    f_positive = f_axis(1:floor(Nfft/2)+1);
-                    X_positive = X(1:floor(Nfft/2)+1);
                     
                     % Find FFT bin closest to known frequency
+                    [~, index] = min(abs(f_axis - frequency));
                     
-                    [~, index] = min(abs(f_positive - frequency));
+                    fft_frequency = f_axis(index);
                     
-                    fft_frequency = f_positive(index);
+                    % FFT value at that frequency
+                    X_peak = X(index);
                     
-                    % Get complex FFT value at that frequency
-                    X_peak = X_positive(index);
+                    %% Calculate amplitude
+                    fft_amplitude = 2*abs(X_peak)/Nbins;
                     
-                    % Calculate amplitude
-                    
-                    fft_amplitude = 2*abs(X_peak)/Nfft;
-                    
-                    % Calculate phase
-                    
+                    %% Calculate phase
                     % FFT gives cosine phase
-                    fft_phase_cos = angle(X_peak);
-                    
-                    % Convert cosine phase to sine phase
-                    fft_phase = fft_phase_cos + pi/2;
-                    
-                    % Keep phase between -pi and pi
-                    %fft_phase = atan2(sin(fft_phase), cos(fft_phase));
-                    
+                    fft_phase = angle(X_peak);
+                   
                     % Reconstruct signal
                     
                     t = time(:);
                     
                     fft_signal_estimation = ...
-                        fft_amplitude * sin(2*pi*fft_frequency*t + fft_phase) ...
+                        fft_amplitude * cos(2*pi*fft_frequency*t + fft_phase) ...
                         + fft_offset;
 
 
                     %% Display Mean, STD, and Amplitude for comparison
-
+                    
                     QAM_Amp = A_estimation;
                     FFT_Amp = fft_amplitude;
                     
-                    QAM_Mean = mean(signal_estimation);
-                    FFT_Mean = mean(fft_signal_estimation);
+                    QAM_Mean = mean(A_estimation);
+                    FFT_Mean = mean(fft_amplitude);
                     
-                    QAM_STD = std(signal_estimation);
-                    FFT_STD = std(fft_signal_estimation);
-                    
-                    fprintf('Modulation Amplitude: %.4f V\n', QAM_Amp);
-                    fprintf('FFT Amplitude:        %.4f V\n\n', FFT_Amp);
-                    
+                    QAM_STD = std(A_estimation);
+                    FFT_STD = std(fft_amplitude);
+
+                    Amplitude_Vector (Counter,1) = QAM_Amp;
+
+
+                    if(Counter > N_samples_STD)
+                        Counter = 1;
+                    end
+
+                        
+                    Amplitude_Vector (Counter,1) = QAM_Amp;
+                    Amplitude_Vector (Counter,2) = FFT_Amp;
+
+
+
+                    Counter = Counter + 1;
+
                     fprintf('Modulation Mean:      %.4f V\n', QAM_Mean);
                     fprintf('FFT Mean:             %.4f V\n\n', FFT_Mean);
                     
@@ -197,30 +197,17 @@ while true
                     fprintf('FFT STD:              %.4f V\n', FFT_STD);
                     fprintf('\n');
 
-                    fprintf('Actual frequency: %.4f Hz\n', frequency);
-                    fprintf('FFT bin frequency: %.4f Hz\n', fft_frequency);
-                    fprintf('Bin spacing: %.4f Hz\n\n', sampleRate/Nfft);
-
-                    fprintf('Sample rate: %.2f Hz\n', sampleRate);
-                    fprintf('Number of samples: %d\n', Nfft);
-        
-                                      
-
-
                     %Plotting
-                
-
-                    subplot(4,1,1)
-
+                    
+      
+                    subplot(5,1,1)
                     plot(voltage1, 'b.-')
-
                     ylabel("Volts [V]");
                     xlabel("Time [s]");
-
                     title('Scope 01');
 
 
-                    subplot(4,1,2)
+                    subplot(5,1,2)
 
                     plot(signal_estimation, 'b.-')
 
@@ -230,13 +217,13 @@ while true
                     title('Parameter Estimation');
                     
 
-                    subplot(4,1,3)
+                    subplot(5,1,3)
                     plot( fft_signal_estimation, 'b.-')
                     ylabel('Volts [V]')
                     xlabel('Time [s]')
                     title('FFT')
 
-                    subplot(4,1,4)
+                    subplot(5,1,4)
                     cla;   
                     hold on;
                     plot( voltage1, 'b.-')
@@ -247,7 +234,21 @@ while true
                     title('comparison');
                     legend('Input', 'QAM','FFT');
                     hold off;
-                    %draw now;
+
+                    subplot(5,2,9);
+                    plot(Amplitude_Vector(:,1),'-.');
+                    ylabel("QAM_Amp [V]");
+                    xlabel("Time [s]");
+                    ylim([0 3]);
+                    title('QAM Amplitude');
+
+                    subplot(5,2,10);
+                    plot(Amplitude_Vector(:,2),'-.');
+                    ylabel("FFT_Amp [V]");
+                    xlabel("Time [s]");
+                    ylim([0 3]);
+                    title('FFT Amplitude');
+                    
 
 
 
