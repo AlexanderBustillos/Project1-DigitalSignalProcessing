@@ -98,7 +98,7 @@ while true
                     voltage1 = voltage1(:);
                     n_samples = length(voltage1);
 
-                    frequency = frequency * 100000;
+                    frequency = 125000;
                     w0 = 2*pi*frequency;
 
                     tn = (0:n_samples-1).' / sampleRate;
@@ -125,52 +125,54 @@ while true
                         sin(w0*tn + phi_estimation) + c_estimation;
 
                     %% FFT
-
+                    
                     x = voltage1(:);
                     Nfft = length(x);
                     
                     % Remove DC component
-                    x_ac = x - mean(x);
+                    fft_offset = mean(x);
+                    x_ac = x - fft_offset;
                     
                     % Compute FFT
                     X = fft(x_ac);
-                    
-                    % Two-sided magnitude spectrum
-                    P2 = abs(X/Nfft);
-                    
-                    % Single-sided magnitude spectrum
-                    P1 = P2(1:floor(Nfft/2)+1);
-                    
-                    % Account for negative frequency
-                    P1(2:end-1) = 2*P1(2:end-1);
-                    
+
                     % Frequency axis
-                    f = sampleRate*(0:floor(Nfft/2))/Nfft;
+                    f_axis = (0:Nfft-1)/Nfft * sampleRate;
                     
+                    % Only look at positive frequencies
+                    f_positive = f_axis(1:floor(Nfft/2)+1);
+                    X_positive = X(1:floor(Nfft/2)+1);
                     
-                    % Estimate signal parameters using FFT
+                    % Find FFT bin closest to known frequency
                     
-                    % Find dominant frequency
-                    [fft_amplitude, index] = max(P1);
+                    [~, index] = min(abs(f_positive - frequency));
                     
-                    % Estimated frequency
-                    fft_frequency = f(index);
+                    fft_frequency = f_positive(index);
                     
-                    % DC offset
-                    fft_offset = mean(x);
+                    % Get complex FFT value at that frequency
+                    X_peak = X_positive(index);
                     
-                    % Get complex FFT value at dominant frequency
-                    X_peak = X(index);
+                    % Calculate amplitude
                     
-                    % Estimate phase
-                    fft_phase = angle(X_peak);
+                    fft_amplitude = 2*abs(X_peak)/Nfft;
                     
+                    % Calculate phase
                     
-                    %% Reconstruct estimated signal
+                    % FFT gives cosine phase
+                    fft_phase_cos = angle(X_peak);
+                    
+                    % Convert cosine phase to sine phase
+                    fft_phase = fft_phase_cos + pi/2;
+                    
+                    % Keep phase between -pi and pi
+                    %fft_phase = atan2(sin(fft_phase), cos(fft_phase));
+                    
+                    % Reconstruct signal
                     
                     t = time(:);
                     
-                    fft_signal_estimation = fft_amplitude * cos(2*pi*fft_frequency*t + fft_phase) ...
+                    fft_signal_estimation = ...
+                        fft_amplitude * sin(2*pi*fft_frequency*t + fft_phase) ...
                         + fft_offset;
 
 
@@ -194,15 +196,23 @@ while true
                     fprintf('Modulation STD:       %.4f V\n', QAM_STD);
                     fprintf('FFT STD:              %.4f V\n', FFT_STD);
                     fprintf('\n');
+
+                    fprintf('Actual frequency: %.4f Hz\n', frequency);
+                    fprintf('FFT bin frequency: %.4f Hz\n', fft_frequency);
+                    fprintf('Bin spacing: %.4f Hz\n\n', sampleRate/Nfft);
+
+                    fprintf('Sample rate: %.2f Hz\n', sampleRate);
+                    fprintf('Number of samples: %d\n', Nfft);
+        
                                       
 
 
                     %Plotting
                 
 
-                    subplot(3,1,1)
+                    subplot(4,1,1)
 
-                    plot(time, voltage1, 'b.-')
+                    plot(voltage1, 'b.-')
 
                     ylabel("Volts [V]");
                     xlabel("Time [s]");
@@ -210,9 +220,9 @@ while true
                     title('Scope 01');
 
 
-                    subplot(3,1,2)
+                    subplot(4,1,2)
 
-                    plot(tn, signal_estimation, 'b.-')
+                    plot(signal_estimation, 'b.-')
 
                     ylabel("Volts [V]");
                     xlabel("Time [s]");
@@ -220,14 +230,25 @@ while true
                     title('Parameter Estimation');
                     
 
-                    subplot(3,1,3)
-
-                    plot(t, fft_signal_estimation, 'b.-')
-
+                    subplot(4,1,3)
+                    plot( fft_signal_estimation, 'b.-')
                     ylabel('Volts [V]')
                     xlabel('Time [s]')
-
                     title('FFT')
+
+                    subplot(4,1,4)
+                    cla;   
+                    hold on;
+                    plot( voltage1, 'b.-')
+                    plot( signal_estimation, 'r.-')
+                    plot( fft_signal_estimation, 'g.-')
+                    ylabel("Volts [V]");
+                    xlabel("Time [s]");
+                    title('comparison');
+                    legend('Input', 'QAM','FFT');
+                    hold off;
+                    %draw now;
+
 
 
                     %Update plot
