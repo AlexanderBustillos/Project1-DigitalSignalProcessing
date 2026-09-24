@@ -102,7 +102,7 @@ while true
                     % Remove DC component
                     fft_offset = mean(x);
                     x_ac = x - fft_offset;
-                    Nbins = 640;
+                    Nbins = 40;
              
                     % Compute FFT
                     X = fft(x_ac, Nbins);
@@ -135,9 +135,7 @@ while true
                     
                     QAM_Amp = A_estimation;
                     FFT_Amp = fft_amplitude;
-             
 
-                        
                     Amplitude_Vector (Counter,1) = QAM_Amp;
                     Amplitude_Vector (Counter,2) = FFT_Amp;
 
@@ -154,7 +152,7 @@ while true
                     FFT_STD = std(Amplitude_Vector(:,2));
 
 
-                    %%Plotting
+                    %% Plotting
                     
                     %Plot of all 3 signals overlapping
                     subplot(3,1,1)
@@ -168,7 +166,7 @@ while true
                     title('comparison');
                     legend('Input', 'QAM','FFT');
                     hold off;
-                    xlim([0 1024])
+                    xlim([0 length(x)])
 
                     %Plot of a period
                     subplot(3,1,2)
@@ -182,8 +180,8 @@ while true
                     title('comparison');
                     legend('Input', 'QAM','FFT');
                     hold off;
-                    ylim([-2.2 2.2])
-                    xlim([550 600])
+                    ylim([-3 3])
+                    xlim([0 50])
 
                     %Plotting the amplitude of the QAM with std and mean
                     subplot(3,2,5);
@@ -191,7 +189,7 @@ while true
                     ylabel("QAM_Amp [V]");
                     xlabel("Time [s]");
                     ylim([0 3]);
-                    str_aux = sprintf('AmpQAMSTD = %f AmpQAMSTD = %f',QAM_STD,QAM_Mean);
+                    str_aux = sprintf('Amp QAM STD = %f Amp QAM MEAN = %f',QAM_STD,QAM_Mean);
                     title(str_aux);
 
                     %Plotting the amplitude of the FFT with std and mean
@@ -200,7 +198,7 @@ while true
                     ylabel("FFT_Amp [V]");
                     xlabel("Time [s]");
                     ylim([0 3]);
-                    str_aux = sprintf('AmpQAMSTD = %f AmpQAMSTD = %f',FFT_STD,FFT_Mean);
+                    str_aux = sprintf('Amp FFT STD = %f Amp FFT MEAN = %f',FFT_STD,FFT_Mean);
                     title(str_aux);
                    
                     %Update plot
