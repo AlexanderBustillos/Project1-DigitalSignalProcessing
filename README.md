@@ -88,10 +88,30 @@ With the Waveforms script running, run the MATLAB file to begin the signal appro
 # Results
 Seven tests were conducted to evaluate each method, QAM and FFT, of estimation under different signal conditions. The experiments were divided into three categories. The first category looked at the sample amount that the AD2 was reading from the inputted signal, the second category was looking at how the signal behaves when noise is added,and the final category is estimating the signal when the frequency is unknown. The baseline signal to compare the methods was a 2Vp-p(4vpp on high z) signal with 125kHz and 0 noise added at 1024 samples. The results of the test compared the changes in graphs as well as the amplitude, STD, and mean of the signals.
 1. Sample Amount Test
-   The first three test looked at the signal and the effects of reducing the number of samples when estimating the signal.
-  Test 1: 1024 samples
+The first three test looked at the signal and the effects of reducing the number of samples when estimating the signal.
+
+Test 1: 1024 samples
 The first test was a baseline test with 2Vpp,125kHz, 0% noise and 1024 samples. This parameter estimation method used the known frequencey from teh CSV file while the FFT method estimated the frequencey to build the parameters.
 ![Test 1](Images/Test1.png)
+The results showed that both methods were able to accurately estimate the signal.
+
+Test 2: 512 samples
+This test shows the signal estimation methods at work when the sampling rate is lower. One thing to note is that the amount of FFT bins had to be lower than half of the sampling rate we take in, at the maximum. The ideal amount of bins for this signal is 40.
+![Test 2](Images/Test2.png)
+The results show that both methods were able to accurately estimate the signal despite having less samples. 
+
+Test 3: 256 samples
+This test shows the signal estimation methods at work when the sampling rate is even lower.
+![Test 3](Images/Test3.png)
+With 256 samples the points that are plotted are able to be seen visually, despite the lower sampling rate there is no distortion in the signal estimation.
+
+2. Noise addition test
+The next two test look at the signal with increased noise, this should alter the signal estimation.
+
+Test 3: 25% Noise
+This test shows the signal estimations with 25% noises added
+
+
 
 # Conclusion
 Experimental results, including statistical comparisons of the two methods.
