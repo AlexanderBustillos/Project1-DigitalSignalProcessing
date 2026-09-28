@@ -1,7 +1,12 @@
 ## Project1-DigitalSignalProcessing
+
 # Introduction
-A brief introduction and project objectives.
-A brief description of QAM and the theory necessary to understand your method.
+This project focuses on two different methods that we are able to measure and estimate a signal in different conditions using the AD2 discovery. The two methods will be compared between each other with different test in order to highlight the strengths and weaknesses of each method.
+QAM( Quadrature amplitude modulation ) is a modulation technique that combines two modulated waves into a single wave to increase the bandwidth.For this project we are estimating signal parameters with two orthogonal components of a signal to estimate a signal.​
+This method works well because it supports high data rate, noise immunity, and low error. The caveat is that if the frequencey is unknown or fluctuates frequently QAM will not estimate the signal properley.
+
+
+​
 A detailed explanation of your FFT-based method.
 # Methodology
 Diagrams, equations, and figures whenever they help explain your methodology.
