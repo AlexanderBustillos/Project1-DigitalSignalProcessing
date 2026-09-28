@@ -91,7 +91,7 @@ Seven tests were conducted to evaluate each method, QAM and FFT, of estimation u
    The first three test looked at the signal and the effects of reducing the number of samples when estimating the signal.
   Test 1: 1024 samples
 The first test was a baseline test with 2Vpp,125kHz, 0% noise and 1024 samples. This parameter estimation method used the known frequencey from teh CSV file while the FFT method estimated the frequencey to build the parameters.
-![Test 1](images/Test1.png)
+![Test 1](Images/Test1.png)
 
 # Conclusion
 Experimental results, including statistical comparisons of the two methods.
