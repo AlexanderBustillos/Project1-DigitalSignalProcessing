@@ -1,10 +1,11 @@
 ## Project1-DigitalSignalProcessing
 
 # Introduction
-This project focuses on two different methods that we are able to measure and estimate a signal in different conditions using the AD2 discovery. The two methods will be compared between each other with different test in order to highlight the strengths and weaknesses of each method.
+This project aims to accurately estimate the parameters of a measured signal for digital signal processing. In this project, two signal analysis methods were implemented using the Analog Discovery 2, and the methods were compared with different signal conditions. The first method used was the parameter estimation method which is based on QAM(Quadrature amplitude modulation) where two orthogonal components of a signal are used to estimate the signal. The second method used the Fast Fourier Transform(FFT) to analyse the signal in the frequency domain. The goal of the project is to determine the accuracy of each method and how well the methods can estimate signal parameters in different situations testing the performance.
 QAM( Quadrature amplitude modulation ) is a modulation technique that combines two modulated waves into a single wave to increase the bandwidth.For this project we are estimating signal parameters with two orthogonal components of a signal to estimate a signal.​
-This method works well because it supports high data rate, noise immunity, and low error. The caveat is that if the frequencey is unknown or fluctuates frequently QAM will not estimate the signal properley.
-Our second method is an FFT, Fast Fourier Transform or equivalently a DFT, Discrete Fourier Transform method. This method analyzes the frequency domain of the signal to determine the important aspects of a signal such as, amplitude, phase, and offset. This method supports a high speed, data compression, and noise reduction.
+This method works well because it supports high data rate, noise immunity, and low error. The caveat is that if the frequency is unknown or fluctuates frequently QAM will not estimate the signal properly.
+Our second method is an FFT, Fast Fourier Transform or equivalently a DFT, Discrete Fourier Transform method. This method analyzes the frequency domain of the signal to determine the important aspects of a signal such as amplitude, phase, and offset by estimating the frequency. This method supports a high speed, data compression, and noise reduction.
+
 
 # Methodology
 ## QAM
