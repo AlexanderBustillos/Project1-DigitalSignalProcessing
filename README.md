@@ -86,7 +86,7 @@ To run the experiments later described, AD2 is required to monitor the function 
 With the Waveforms script running, run the MATLAB file to begin the signal approximation, MATLAB will systematically read each .csv file and update the graphs of QAM, and FFT in real time. This setup was the used to conduct all testing and data collection for the comparison of the two methods
 
 # Results
-Seven tests were conducted to evaluate each method, QAM and FFT, of estimation under different signal conditions. The experiments were divided into three categories. The first category looked at the sample amount that the AD2 was reading from the inputted signal, the second category was looking at how the signal behaves when noise is added,and the final category is estimating the signal when the frequency is unknown. The baseline signal to compare the methods was a 2Vp-p(4vpp on high z) signal with 125kHz and 0 noise added at 1024 samples. The results of the test compared the changes in graphs as well as the amplitude, STD, and mean of the signals.
+Seven tests were conducted to evaluate each method, QAM and FFT, of estimation under different signal conditions. The experiments were divided into four categories. The first category looked at the sample amount that the AD2 was reading from the inputted signal, the second category was looking at how the signal behaves when noise is added, and the third category is estimating the signal when the frequency is unknown, the final category will be analyzing the STD and mean of the amplitudes.. The baseline signal to compare the methods was a 2Vp-p(4vpp on high z) signal with 125kHz and 0 noise added at 1024 samples. The results of the test compared the changes in graphs as well as the amplitude, STD, and mean of the signals.
 1. Sample Amount Test
 The first three test looked at the signal and the effects of reducing the number of samples when estimating the signal.
 
@@ -108,8 +108,33 @@ With 256 samples the points that are plotted are able to be seen visually, despi
 2. Noise addition test
 The next two test look at the signal with increased noise, this should alter the signal estimation.
 
-Test 3: 25% Noise
-This test shows the signal estimations with 25% noises added
+Test 4: 25% Noise
+This test shows the signal estimations with 25% noise added.
+![Test 4](Images/Test4.png)
+In this image you are able to see the input wave being altered from the noise and having different amplitude in different sections. Both of the estimated signals are working very well and create a signal that follows along the estimated path.
+
+Test 5: 50% Noise
+This test shows the signal estimations with 50% noise added.
+![Test 5](Images/Test5.png)
+In this image the signals are no longer in sync with each other, too much noise has been added and the input signal is giving different values for the methods to estimate with. The QAM and FFT are creating close approximations but are out of sync at times with amplitude, phase is working well.
+
+3. Frequency change test
+The next two test look at the signal with two different frequencies. This should alter the QAM method greatly as the whole method relies on knowing the frequency beforehand, without the known frequency the QAM method falls very quickly. This means that the FFT method should be able to estimate the signal better than QAM and highlight its strengths.
+
+Test 6: 125.5 kHz
+
+This test shows the signal at 125.5 kHz, just a slight alteration from the original signal to view the effects.
+![Test 6](Images/Test6.png)
+In this image we are able to see the input signal the the FFT estimation are in phase for the first 600 samples but starts to get out of phase after the next 600 samples. This test shows that the QAM method starts to falter when the frequency is altered, the FFT method is working very well but still has trouble after a 600 samples.
+
+Test 7: 11788 kHz
+
+This test shows the signal at 11788 kHz, this is a large alteration and should make both signals estimations wrong.
+![Test 7](Images/Test7.png)
+In this image both signals are not accurately estimating the input signal anymore, this is because both signals rely on knowing something from the signal. Looking at the graph it is easy to see that the QAM method has failed entirely and was not able to estimate the signals amplitude or phase. The FFT method was able to accurately estimate the amplitude of the signal but quickly got out of phase.
+
+4. AMP,Mean,STD evaluation
+
 
 
 
