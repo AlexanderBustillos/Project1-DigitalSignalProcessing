@@ -84,8 +84,15 @@ The equations are solved when $S_m$ is the peak frequency and $theta_m$ is the a
 To run the experiments later described, AD2 is required to monitor the function generator on the oscilloscope and transform the measured information into a .csv file for the MATLAB code provided. For our experiments a 4Vp-p signal was generated at 125kHz, in High-Z mode, this signal was sent through the Scope Ch1. ports on the AD2. Once connected and the function generator is running, open the scope window in Waveforms to monitor the signal using the AD2. Once the signal looks as expected run the script file provided to generate the .csv files for the MATLAB program.
 
 With the Waveforms script running, run the MATLAB file to begin the signal approximation, MATLAB will systematically read each .csv file and update the graphs of QAM, and FFT in real time. This setup was the used to conduct all testing and data collection for the comparison of the two methods
+
 # Results
-Results
+Seven tests were conducted to evaluate each method, QAM and FFT, of estimation under different signal conditions. The experiments were divided into three categories. The first category looked at the sample amount that the AD2 was reading from the inputted signal, the second category was looking at how the signal behaves when noise is added,and the final category is estimating the signal when the frequency is unknown. The baseline signal to compare the methods was a 2Vp-p(4vpp on high z) signal with 125kHz and 0 noise added at 1024 samples. The results of the test compared the changes in graphs as well as the amplitude, STD, and mean of the signals.
+1. Sample Amount Test
+   The first three test looked at the signal and the effects of reducing the number of samples when estimating the signal.
+  Test 1: 1024 samples
+The first test was a baseline test with 2Vpp,125kHz, 0% noise and 1024 samples. This parameter estimation method used the known frequencey from teh CSV file while the FFT method estimated the frequencey to build the parameters.
+
+
 # Conclusion
 Experimental results, including statistical comparisons of the two methods.
 Discussion and interpretation of the results.
