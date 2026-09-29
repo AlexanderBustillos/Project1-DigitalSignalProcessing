@@ -141,12 +141,22 @@ The amplitude estimation for the QAM based method and the FFT method are shown i
 Table 1, this table shows the STD and Mean of all 7 test for the FFT and QAM based method.
 ![Test 7](Images/Testtable.png)
 
+For the baseline test both methods were very similar estimating an amplitude of 2.0291 V. The QAM method had a lower STD than the FFT method, 0.000153 V and 0.000166 V. This shows that the methods made very similar results only differing slightly. Tests 2 and 3 both produced similar results and showed that the sample count does not have a lot of affect on the amplitude estimations. 
 
+The noise test, 4 and 5, shows that noise affected the amplitude estimated greatly. With 25% noise in test 4 the mean increased to 2.2209V in the FFT method, and 2.2202 for the QAM method. At 50% noise in test 5, the QAM and FFT produced means of 2.282 V and 2.285 V. this increase in the noise levels caused both methods to overestimate the amplitude by ~.2 V. The expected value is 2V. The standard deviation increased from 0.0054 to 0.01156 from test 4 to test 5. The amplitude became less stable as the noise increased.
+
+The frequency test produced the largest differences by far. In test 6, the input frequency was changed to 125.5 kHz, this caused the QAM method to underestimate the voltage to 1.9987 V and the FFT method estimated 2.0317V. Both values remained close to 2Vpp. However, in test 7 the frequency was dropped to 117 kHz, this caused the QAM to gradually underestimate the amplitude at 0.3734 V, while the FFT method produced 2.0635V. The biggest difference in the methods was when the frequency was changed, this altered the FFT signal and caused the signal to get out of phase, but for the QAM method the signal was entirely wrong.
 
 # Conclusion
-Experimental results, including statistical comparisons of the two methods.
-Discussion and interpretation of the results.
+The results of this project showed how the QAM parameter estimation method and FFT method have different results under different conditions. Under the baseline conditions, both methods produced very similar amplitude estimates and were able to accurately reconstruct the input signal. Reducing the number of samples had no effect on the overall amplitude estimation, showing that both methods were still able to estimate the signal with fewer samples.
+
+Adding noise had a bigger effect on the amplitude estimates of both methods. As the noise increased from 25% to 50%, the estimated amplitude increased and the standard deviation also increased, this showed that the measurements became less stable. The frequency tests produced the largest difference between the two methods. The QAM method needs to know the frequency of the signal, with its amplitude estimate getting worse when the frequency was changed to 117 kHz. The FFT method was able to maintain a much closer amplitude estimate under the same condition, its reconstructed signal eventually became out of phase because the method did rely on a part of the frequency being known. To combat this in future constructions it would be better to have the frequency estimated enteirley from the set values given from the signal, and it would give a cleaner estimation if a filter and window was implimented to reduce the amount of noise
+
+Overall, the experiments demonstrated that both methods can provide accurate signal estimation when the signal conditions are known and relatively clean. However, the results also showed different limitations for each method. The QAM method is strongly dependent on the known frequency, while the FFT method is more capable of identifying changes in frequency but can be affected by sampling resolution, noise, and phase errors. These results demonstrate the importance of selecting a signal estimation method based on the characteristics and conditions of the signal being measured. For example, if the frequency of the signal is known, then the QAM method is able to accurately replicate the signal with different noise and sample rate, but if the frequency is unknown or the frequency fluctuates the FFT method would be optimal for estimating the signal.
+
 # References
 
+GeeksforGeeks. (2022). Quadrature amplitude modulation. Retrieved from https://www.geeksforgeeks.org/computer-networks/quadrature-amplitude-modulation/ ​
 
+Lombello, C. B., & da Ana, P. A. (2023). Current trends in Biomedical Engineering. Cham, Cham: Springer International Publishing Springer. ​
 
