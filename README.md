@@ -135,7 +135,7 @@ This test shows the signal at 11788 kHz, this is a large alteration and should m
 ![Test 7](Images/Test7.png)
 In this image both signals are not accurately estimating the input signal anymore, this is because both signals rely on knowing something from the signal. Looking at the graph it is easy to see that the QAM method has failed entirely and was not able to estimate the signals amplitude or phase. The FFT method was able to accurately estimate the amplitude of the signal but quickly got out of phase.
 
-4. AMP,Mean,STD evaluation
+4. Amplitude Mean and STD evaluation
 
 
 
