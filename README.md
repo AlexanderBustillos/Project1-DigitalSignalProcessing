@@ -11,7 +11,7 @@ Our second method is an FFT, Fast Fourier Transform or equivalently a DFT, Discr
 
 # Methodology
 ## QAM
-The QAM method works to estimate each component of a sine wave using parameter estimation techniques such as the psuedo E matrix. The QAM is designed to approximation signals that are of the form:
+The QAM method works to estimate each component of a sine wave using parameter estimation techniques such as the pseudo E matrix. The QAM is designed to approximation signals that are of the form:
 
 $$
 x(t) = Asin(w0t + phi) + C
@@ -93,7 +93,7 @@ Seven tests were conducted to evaluate each method, QAM and FFT, of estimation u
 The first three test looked at the signal and the effects of reducing the number of samples when estimating the signal.
 
 Test 1: 1024 samples
-The first test was a baseline test with 2Vpp,125kHz, 0% noise and 1024 samples. This parameter estimation method used the known frequencey from teh CSV file while the FFT method estimated the frequencey to build the parameters.
+The first test was a baseline test with 2Vpp,125kHz, 0% noise and 1024 samples. This parameter estimation method used the known frequency from the CSV file while the FFT method estimated the frequency to build the parameters.
 ![Test 1](Images/Test1.png)
 Fig 1, the results showed that both methods were able to accurately estimate the signal.
 
