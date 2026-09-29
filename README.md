@@ -95,17 +95,17 @@ The first three test looked at the signal and the effects of reducing the number
 Test 1: 1024 samples
 The first test was a baseline test with 2Vpp,125kHz, 0% noise and 1024 samples. This parameter estimation method used the known frequencey from teh CSV file while the FFT method estimated the frequencey to build the parameters.
 ![Test 1](Images/Test1.png)
-The results showed that both methods were able to accurately estimate the signal.
+Fig 1, the results showed that both methods were able to accurately estimate the signal.
 
 Test 2: 512 samples
 This test shows the signal estimation methods at work when the sampling rate is lower. One thing to note is that the amount of FFT bins had to be lower than half of the sampling rate we take in, at the maximum. The ideal amount of bins for this signal is 40.
 ![Test 2](Images/Test2.png)
-The results show that both methods were able to accurately estimate the signal despite having less samples. 
+Fig 2, the results show that both methods were able to accurately estimate the signal despite having less samples. 
 
 Test 3: 256 samples
 This test shows the signal estimation methods at work when the sampling rate is even lower.
 ![Test 3](Images/Test3.png)
-With 256 samples the points that are plotted are able to be seen visually, despite the lower sampling rate there is no distortion in the signal estimation.
+Fig 3, with 256 samples the points that are plotted are able to be seen visually, despite the lower sampling rate there is no distortion in the signal estimation.
 
 2. Noise addition test
 The next two test look at the signal with increased noise, this should alter the signal estimation.
@@ -113,12 +113,12 @@ The next two test look at the signal with increased noise, this should alter the
 Test 4: 25% Noise
 This test shows the signal estimations with 25% noise added.
 ![Test 4](Images/Test4.png)
-In this image you are able to see the input wave being altered from the noise and having different amplitude in different sections. Both of the estimated signals are working very well and create a signal that follows along the estimated path.
+Figure 4, in this image you are able to see the input wave being altered from the noise and having different amplitude in different sections. Both of the estimated signals are working very well and create a signal that follows along the estimated path.
 
 Test 5: 50% Noise
 This test shows the signal estimations with 50% noise added.
 ![Test 5](Images/Test5.png)
-In this image the signals are no longer in sync with each other, too much noise has been added and the input signal is giving different values for the methods to estimate with. The QAM and FFT are creating close approximations but are out of sync at times with amplitude, phase is working well.
+Figure 5, in this image the signals are no longer in sync with each other, too much noise has been added and the input signal is giving different values for the methods to estimate with. The QAM and FFT are creating close approximations but are out of sync at times with amplitude, phase is working well.
 
 3. Frequency change test
 The next two test look at the signal with two different frequencies. This should alter the QAM method greatly as the whole method relies on knowing the frequency beforehand, without the known frequency the QAM method falls very quickly. This means that the FFT method should be able to estimate the signal better than QAM and highlight its strengths.
@@ -127,16 +127,19 @@ Test 6: 125.5 kHz
 
 This test shows the signal at 125.5 kHz, just a slight alteration from the original signal to view the effects.
 ![Test 6](Images/Test6.png)
-In this image we are able to see the input signal the the FFT estimation are in phase for the first 600 samples but starts to get out of phase after the next 600 samples. This test shows that the QAM method starts to falter when the frequency is altered, the FFT method is working very well but still has trouble after a 600 samples.
+Figure 6, in this image we are able to see the input signal the the FFT estimation are in phase for the first 600 samples but starts to get out of phase after the next 600 samples. This test shows that the QAM method starts to falter when the frequency is altered, the FFT method is working very well but still has trouble after a 600 samples.
 
 Test 7: 11788 kHz
 
 This test shows the signal at 11788 kHz, this is a large alteration and should make both signals estimations wrong.
 ![Test 7](Images/Test7.png)
-In this image both signals are not accurately estimating the input signal anymore, this is because both signals rely on knowing something from the signal. Looking at the graph it is easy to see that the QAM method has failed entirely and was not able to estimate the signals amplitude or phase. The FFT method was able to accurately estimate the amplitude of the signal but quickly got out of phase.
+Figure 7, in this image both signals are not accurately estimating the input signal anymore, this is because both signals rely on knowing something from the signal. Looking at the graph it is easy to see that the QAM method has failed entirely and was not able to estimate the signals amplitude or phase. The FFT method was able to accurately estimate the amplitude of the signal but quickly got out of phase.
 
 4. Amplitude Mean and STD evaluation
+The amplitude estimation for the QAM based method and the FFT method are shown in Table 1 bellow. The mean and standard deviation were calculated for each of the seven test and to show the accuracy  and consistency of the methods. The expected output for the voltage is 2 Vpp.
 
+Table 1, this table shows the STD and Mean of all 7 test for the FFT and QAM based method.
+![Test 7](Images/Testtable.png)
 
 
 
